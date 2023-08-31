@@ -63,7 +63,7 @@ struct CustomSlider: View {
                         .offset(x: (geometry.size.width / maxLength) * modStart)
                         .foregroundColor(.yellow)
                         .opacity(0.1)
-                } else {
+                } else if modStart > modEnd {
                     Rectangle()
                         .frame(
                             width: (geometry.size.width / maxLength) * min(length, length - modStart))
@@ -87,7 +87,11 @@ struct CustomSlider: View {
                         DragGesture()
                             .onChanged({ gesture in
                                 loop.start = Double(gesture.location.x / geometry.size.width) * maxLength
-                                loop.start = loop.start < 0 ? 0 : loop.start > length ? length : loop.start
+                                if modStart < 0 {
+                                    loop.start = 0
+                                } else if modStart > modEnd {
+                                    loop.start = modEnd
+                                }
                             })
                     )
                 
@@ -100,7 +104,11 @@ struct CustomSlider: View {
                         DragGesture()
                             .onChanged({ gesture in
                                 loop.end = Double(gesture.location.x / geometry.size.width) * maxLength
-                                loop.end = loop.end < 0 ? 0 : loop.end > length ? length : loop.end
+                                if modEnd < 0 {
+                                    loop.end = 0
+                                } else if modEnd < modStart {
+                                    loop.end = modStart
+                                }
                             })
                     )
             }
