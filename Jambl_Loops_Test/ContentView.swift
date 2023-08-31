@@ -86,7 +86,7 @@ struct CustomSlider: View {
                     .gesture(
                         DragGesture()
                             .onChanged({ gesture in
-                                loop.start = Double(gesture.location.x / geometry.size.width) * 100.0
+                                loop.start = Double(gesture.location.x / geometry.size.width) * maxLength
                                 loop.start = loop.start < 0 ? 0 : loop.start > length ? length : loop.start
                             })
                     )
@@ -99,7 +99,7 @@ struct CustomSlider: View {
                     .gesture(
                         DragGesture()
                             .onChanged({ gesture in
-                                loop.end = Double(gesture.location.x / geometry.size.width) * 100.0
+                                loop.end = Double(gesture.location.x / geometry.size.width) * maxLength
                                 loop.end = loop.end < 0 ? 0 : loop.end > length ? length : loop.end
                             })
                     )
