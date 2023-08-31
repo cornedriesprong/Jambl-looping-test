@@ -14,6 +14,7 @@
 		97CD27EF2AA088E500534CAB /* Jambl_Loops_TestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97CD27EE2AA088E500534CAB /* Jambl_Loops_TestTests.swift */; };
 		97CD27F92AA088E500534CAB /* Jambl_Loops_TestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97CD27F82AA088E500534CAB /* Jambl_Loops_TestUITests.swift */; };
 		97CD27FB2AA088E500534CAB /* Jambl_Loops_TestUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97CD27FA2AA088E500534CAB /* Jambl_Loops_TestUITestsLaunchTests.swift */; };
+		97CD28082AA09BC700534CAB /* DisplayLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97CD28072AA09BC700534CAB /* DisplayLink.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		97CD27F42AA088E500534CAB /* Jambl_Loops_TestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Jambl_Loops_TestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		97CD27F82AA088E500534CAB /* Jambl_Loops_TestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jambl_Loops_TestUITests.swift; sourceTree = "<group>"; };
 		97CD27FA2AA088E500534CAB /* Jambl_Loops_TestUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jambl_Loops_TestUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		97CD28072AA09BC700534CAB /* DisplayLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayLink.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 		97CD27D12AA088E400534CAB = {
 			isa = PBXGroup;
 			children = (
+				97CD28072AA09BC700534CAB /* DisplayLink.swift */,
 				97CD27DC2AA088E400534CAB /* Jambl_Loops_Test */,
 				97CD27ED2AA088E500534CAB /* Jambl_Loops_TestTests */,
 				97CD27F72AA088E500534CAB /* Jambl_Loops_TestUITests */,
@@ -258,6 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				97CD27E02AA088E400534CAB /* ContentView.swift in Sources */,
+				97CD28082AA09BC700534CAB /* DisplayLink.swift in Sources */,
 				97CD27DE2AA088E400534CAB /* Jambl_Loops_TestApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
