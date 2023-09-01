@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  Jambl_Loops_Test
-//
-//  Created by Corné Driesprong on 31/08/2023.
-//
-
 import SwiftUI
 
 let maxLength = 64.0
@@ -37,9 +30,15 @@ struct ContentView: View {
         .padding()
         .onAppear {
             displayLink.start {
-                progress += 0.1
+                if progress >= loop.end {
+                    progress = loop.start
+                } else {
+                    progress += 0.1
+                }
             }
         }
+
+
     }
 }
 
@@ -50,6 +49,10 @@ struct CustomSlider: View {
     let thumbHeight = CGFloat(30.0)
     let thumbWidth = CGFloat(3.0)
     
+    var blockWidth: CGFloat {
+        return CGFloat(maxLength / length)
+    }
+    
     var modStart: Double {
         return loop.start.truncatingRemainder(dividingBy: length)
     }
@@ -58,60 +61,69 @@ struct CustomSlider: View {
         return loop.end.truncatingRemainder(dividingBy: length)
     }
     
+    var phaseIndicator: some View {
+        VStack {
+            Spacer()
+            Rectangle()
+                .foregroundColor(.purple)
+                .frame(width: 2, height: thumbHeight * 1.5)
+            Spacer()
+        }
+    }
+    
+    var blocks: some View {
+        let numberOfBlocks = Int(maxLength / length)
+        return HStack(spacing: 0) {
+            ForEach(0..<numberOfBlocks) { _ in
+                Rectangle()
+                    .frame(width: thumbWidth, height: thumbHeight)
+                    .foregroundColor(.gray)
+                Spacer()
+            }
+        }
+    }
+
     var body: some View {
-        return GeometryReader { geometry in
-            let width = geometry.size.width + thumbWidth
-            let modProgress = (progress + modStart).truncatingRemainder(dividingBy: modEnd)
-            let progressX = (modProgress / length) * width
-                                     
+        GeometryReader { geometry in
+            let width = geometry.size.width
+            let segmentWidth = width / CGFloat(maxLength / length)
+            
+            let relativeStart = loop.start * (length / maxLength)
+            let relativeEnd = loop.end * (length / maxLength)
+
+            let startSegment = CGFloat(relativeStart) * segmentWidth / CGFloat(length)
+            let endSegment = CGFloat(relativeEnd) * segmentWidth / CGFloat(length)
+
+            
             ZStack(alignment: .leading) {
+                blocks
+                
                 Rectangle()
                     .foregroundColor(.gray)
-                    .frame(
-                        width: geometry.size.width,
-                        height: 3)
+                    .frame(width: geometry.size.width, height: 3)
                 
-                if modStart < modEnd {
-                    Rectangle()
-                        .frame(
-                            width: (width / length) * min(length, modEnd - modStart))
-                        .offset(x: (width / length) * modStart)
-                        .foregroundColor(.yellow)
-                        .opacity(0.1)
-                } else if modStart > modEnd {
-                    Rectangle()
-                        .frame(
-                            width: (width / length) * min(length, length - modStart))
-                        .offset(x: ((geometry.size.width - thumbWidth) / length) * modStart)
-                        .foregroundColor(.yellow)
-                        .opacity(0.1)
-                    
-                    Rectangle()
-                        .frame(
-                            width: (width / length) * min(length, modEnd))
-                        .foregroundColor(.yellow)
-                        .opacity(0.1)
-                }
-
+                phaseIndicator
+                    .offset(x: CGFloat(progress / maxLength) * geometry.size.width)
+                
+                Rectangle()
+                    .foregroundColor(.yellow)
+                    .opacity(0.1)
+                    .frame(width: endSegment - startSegment, height: thumbHeight)
+                    .offset(x: startSegment)
+                
                 // start loop indicator
                 Rectangle()
                     .foregroundColor(.blue)
                     .frame(width: thumbWidth, height: thumbHeight)
                     .contentShape(Rectangle())
-                    .offset(x: CGFloat((modStart) / length) * geometry.size.width)
+                    .offset(x: startSegment)
                     .gesture(
                         DragGesture()
                             .onChanged({ gesture in
-                                var start = Double(gesture.location.x / width) * length
-                                if modStart < 0 {
-                                    start = 0
-                                } else if modStart >= length {
-                                    start = length 
-                                } else if modStart >= modEnd {
-                                    start = modEnd
-                                }
-                                loop.start = start
+                                let newValue = Double(gesture.location.x / geometry.size.width) * maxLength
+                                loop.start = min(max(0, newValue), loop.end - 1.0) // Ensure there's at least 1 unit difference between start and end
                             })
+
                     )
                 
                 // end loop indicator
@@ -119,32 +131,21 @@ struct CustomSlider: View {
                     .foregroundColor(.red)
                     .frame(width: thumbWidth, height: thumbHeight)
                     .contentShape(Rectangle())
-                    .offset(x: CGFloat((modEnd) / length) * width)
+                    .offset(x: endSegment)
                     .gesture(
                         DragGesture()
                             .onChanged({ gesture in
-                                var end = Double(gesture.location.x / width) * length
-                                if modEnd <= 0 {
-                                    end = 0
-                                } else if modEnd >= length {
-                                    end = length
-                                } else if modEnd <= modStart {
-                                    end = modStart
-                                }
-                                loop.end = end
+                                let newValue = Double(gesture.location.x / geometry.size.width) * maxLength
+                                loop.start = min(max(0, newValue), loop.end - 1.0) // Ensure there's at least 1 unit difference between start and end
                             })
+
+
                     )
-               
-                // progress indicator
-                Rectangle()
-                    .foregroundColor(.black)
-                    .frame(width: thumbWidth, height: thumbHeight)
-                    .contentShape(Rectangle())
-                    .offset(x: progressX)
             }
         }.frame(height: 30, alignment: .center)
     }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
